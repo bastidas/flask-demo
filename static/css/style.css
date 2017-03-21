@@ -1,1 +1,11 @@
-background-color:'grey'
+.body {
+background-color:'grey';
+}
+
+.input-group {
+        width:50%;
+        float:none;
+        margin:0 auto;
+}
+
+
