@@ -7,13 +7,17 @@
 */
 
 .container {
+margin-top:80px;
+
 background-color: #C8C8C8;
 width = 800px;
+height = 800px;
 font-family: "Futura", 'questrial', "Century Gothic", "Century New Gothic", Litera, "Geometric 706 Std Complete", "Twentieth Century 1", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; /*geometric fonts, fall back to best helvetica, then sans-serif */
 text-decoration: none;
 color: black;
 font-weight: 300;
 font-size: 14pt;
+
 }
 
 .input-group {
