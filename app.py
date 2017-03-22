@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, Markup
 import pandas as pd
+import flask
 
 app = Flask(__name__)
 
@@ -11,11 +12,18 @@ ticker_symbols = tickers['quandl code'].values
 
 
 from bokeh.plotting import figure
-from bokeh.resources import CDN
+#from bokeh.resources import CDN
 from bokeh.embed import components
 #from bokeh.models import NumeralTickFormatter
 import numpy as np
 import datetime
+
+#from bokeh.embed import components
+#from bokeh.plotting import figure
+from bokeh.resources import INLINE
+from bokeh.util.string import encode_utf8
+
+
 
 def generate_plot(symbl, name):
     print("inside generate plot")
@@ -46,9 +54,28 @@ def generate_plot(symbl, name):
     #plot.legend.orientation = 'top_left'
     #plot.legend.background_fill_alpha = 0.5
     #plot.yaxis[0].formatter = NumeralTickFormatter(format='$0.00')
-    script, div = components(plot, CDN)
+    #script, div = components(plot)#, CDN)
+
+
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+
+    script, div = components(plot)
+
+
     print('returned')
-    return Markup(script), Markup(div)
+    return script, div, js_resources, css_resources
+    #return Markup(script), Markup(div)
+
+
+def simple_plot(symbl, name):
+    x = list(range(0, 10 + 1))
+    fig = figure(title=name)
+    fig.line(x, [i ** 2 for i in x], line_width=2)
+    js = INLINE.render_js()
+    css = INLINE.render_css()
+    script, div = components(fig)
+    return script, div, js, css
 
 
 
@@ -59,6 +86,8 @@ def generate_plot(symbl, name):
 #@app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
     print("request.method:", request.method)
     print("request.form:", request.form)
     if request.method == 'POST' and 'symbol' in request.form:
@@ -74,17 +103,37 @@ def index():
                 print('generating plot')
                 print('sym: ', sym)
                 print('stock:', stock)
-                posted_script, posted_div = generate_plot(sym, stock)
-                print("rendering_template")
-                return render_template('index.html', place_holder="I know that symbol", 
-                  plot_script=posted_script, plot_div=posted_div)
+                #x = list(range(0, 100 + 1))
+                #print(x)
+                #fig = figure(title=stock)
+                #print('fig1')
+                #fig.line(x, [i ** 2 for i in x], line_width=2)
+                #print('fig2')
+                #js_resources = INLINE.render_js()
+                #c = INLINE.render_css()
+                #print('js cs reccoures')
+                #script, div = components(fig)
+                #print('made fig')
+                script, div, js, css = simple_plot(sym, stock)
+                html = flask.render_template('index.html', place_holder="Enter a stock symbol", plot_script=script, plot_div=div, js_resources=js, css_resources=css)
+                print('returning html')
+                #return render_template('index.html', place_holder="I know that symbol", 
+                #  plot_script=posted_script, plot_div=posted_div)
+                return encode_utf8(html)
+                #return html
             except:
-                return render_template('index.html', place_holder="Fail.")
+                #return render_template('index.html', place_holder="Fail.")
+                html = flask.render_template('index.html', place_holder="Fail. Something went wrong", js_resources=js_resources, css_resources=css_resources)  
+                return html
         else:
-            return render_template('index.html', place_holder="I do not know this symbol")
+            #return render_template('index.html', place_holder="I do not know this symbol")
+            html = flask.render_template('index.html', place_holder="Invalid symbol", js_resources=js_resources, css_resources=css_resources)  
+            return html
     else:
-        #print("first else...")
-        return render_template('index.html', place_holder="Please input a stock symbol...")
+        #js_resources = INLINE.render_js()
+        #css_resources = INLINE.render_css()
+        html = flask.render_template('index.html', place_holder="Enter a stock symbol", js_resources=js_resources, css_resources=css_resources)  
+        return html
 
 #@app.route('/404')
 #def not_found():

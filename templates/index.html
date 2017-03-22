@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv='content-type' content='text/html; charset=utf-8' />
 	<title>Stock Demo ABF</title>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
@@ -13,15 +14,34 @@
 
 
 
-<link href="http://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
+<!--<link href="http://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">-->
 
 
-        {% if plot_script %}
-                {{ plot_script }}
-        {% endif %}
+<!--
 
 
+    {% if js_resources %}
+     {{ js_resources|indent(4)|safe }}
+    {% endif %}
 
+    {% if css_resources %}
+    {{ css_resources|indent(4)|safe }}
+    {% endif %}
+
+
+    {% if plot_script %}
+{{ plot_script }}
+    {% endif %}-->
+
+
+    {{ js_resources|indent(4)|safe }}
+
+    {{ css_resources|indent(4)|safe }}
+
+{% if plot_script %}
+
+    {{ plot_script|indent(4)|safe }}
+ {% endif %}
 </head>
 
 <body>
@@ -47,10 +67,13 @@
 
 <div class="row" style="margin-top:5%;">
     <div class="input-group">
-        {% if plot_div %}
-        PLOT DIV!
-            {{ plot_div }}
-        {% endif %}
+ 
+
+ {% if plot_div %}
+yes plot div
+    {{ plot_div|indent(4)|safe }}
+
+     {% endif %}
     </div> 
 </div> 
 
