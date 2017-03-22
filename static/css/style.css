@@ -1,5 +1,14 @@
-body {
-background-color: #34495E;
+/*
+#FFC300 yellow
+#2e4053 light slate
+#34495e slate
+#FF5733 orange
+#C70039 red
+*/
+
+.container {
+background-color: #34495e;
+width = 800px;
 }
 
 .input-group {
