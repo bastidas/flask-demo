@@ -3,8 +3,8 @@ import pandas as pd
 
 app = Flask(__name__)
 
-#tickers = pd.read_csv('https://s3.amazonaws.com/quandl-static-content/Ticker+CSV%27s/WIKI_tickers.csv')
-tickers = pd.read_csv('tickers.csv')
+tickers = pd.read_csv('https://s3.amazonaws.com/quandl-static-content/Ticker+CSV%27s/WIKI_tickers.csv')
+#tickers = pd.read_csv('tickers.csv')
 
 ticker_symbols = tickers['quandl code'].values
 
