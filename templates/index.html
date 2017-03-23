@@ -3,45 +3,25 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-	<title>Stock Demo ABF</title>
+	<title>Stock Demo</title>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    
-
-	
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 
-<link href="http://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
-
-<script language="javascript">
-$('.btn[data-radio-name]').click(function() {
-    $('.btn[data-radio-name="'+$(this).data('radioName')+'"]').removeClass('active');
-    $('input[name="'+$(this).data('radioName')+'"]').val(
-        $(this).text()
-    );
-});
-
-$('.btn[data-checkbox-name]').click(function() {
-    $('input[name="'+$(this).data('checkboxName')+'"]').val(
-        $(this).hasClass('active') ? 0 : 1
-    );
-});
-</script>
+    <link href="http://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
 
 
+    {{ js_resources|safe }}
 
-    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|safe }}
 
-    {{ css_resources|indent(4)|safe }}
-
-{% if plot_script %}
-
-    {{ plot_script|indent(4)|safe }}
- {% endif %}
+    {% if plot_script %}
+    {{ plot_script|safe }}
+    {% endif %}
 </head>
 
 <body>
@@ -50,22 +30,10 @@ $('.btn[data-checkbox-name]').click(function() {
 <div class="container">
 
 <div>
-  <h1>Stock Demo ABF</h1>
+  <h1>Stock Demo</h1>
 </div>
 <div class="row" style="margin-top:3%;">
     <div class="input-group col-md-7">
-
-
-<!--form name="measure_button" method='POST'>
-        Measure:
-        <select name="Measure">
-            <option {{ "selected" if measure|indent(4)|safe == "Value" }} value="Value">Value</option>
-            <option {{ "selected" if measure|indent(4)|safe == "Percent" }} value="Percent">Percent</option>
-        </select>
-        <br>
-        <button type="submit">Update</button>
-    </form>-->
-
         <form method="POST" action="/">
 
         <div class="input-group add-on">
@@ -75,63 +43,29 @@ $('.btn[data-checkbox-name]').click(function() {
             </div>
         </div>
 
-        
+        <br/>
         <fieldset>
-        <legend>Please select one of the following</legend>
-        <input type="checkbox" name="open" id="open" value="1" {{ "checked" if open|indent(4)|safe == "1" }}/>
-        <label for="open">Open</label><br />
-        <input type="checkbox" name="close" id="close" value="1"  {{ "checked" if close|indent(4)|safe == "1" }}/>
-        <label for="close">Close</label><br />
-        <input type="checkbox" name="adj_open" id="adjusted open" value="1" {{ "checked" if adj_open|indent(4)|safe == "1" }}/>
-        <label for="adjusted open">Adjusted Open</label><br />
-        <input type="checkbox" name="adj_close" id="adjusted close" value="1" {{ "checked" if adj_close|indent(4)|safe == "1" }}/>
-        <label for="adjusted close">Adjusted Close</label><br />
-
-{{ "checked" if adj_close|indent(4)|safe == "0" }}
-<!--
-        <input type="button" name="open" id="open" value="1" />
-        <label for="open">Open</label><br />
-        <input type="button" name="close" id="close" value="1"  />
-        <label for="close">Close</label><br />
-        <input type="button" name="adj_open" id="adjusted open" value="1" />
-        <label for="adjusted open">Adjusted Open</label><br />
-        <input type="button" name="adj_close" id="adjusted close" value="1" checked />
-        <label for="adjusted close">Adjusted Close</label><br />-->
-
-
-
+        <legend></legend>
+        <input type="checkbox" name="open" id="open" value="1" {{ "checked" if open|safe == "1" }}/>
+        <label for="open">Opening price</label><br />
+        <input type="checkbox" name="close" id="close" value="1"  {{ "checked" if close|safe == "1" }}/>
+        <label for="close">Closing price</label><br />
+        <input type="checkbox" name="adj_open" id="adjusted open" value="1" {{ "checked" if adj_open|safe == "1" }}/>
+        <label for="adjusted open">Adjusted opening</label><br />
+        <input type="checkbox" name="adj_close" id="adjusted close" value="1" {{ "checked" if adj_close|safe == "1" }}/>
+        <label for="adjusted close">Adjusted closing price</label><br />
         </fieldset>
         
-
-
+        <fieldset>
+            Time Range:
         <select name="Measure">
-            <option {{ "selected" if measure|indent(4)|safe == "Value" }} value="Value">Value</option>
-            <option {{ "selected" if measure|indent(4)|safe == "Percent" }} value="Percent">Percent</option>
+            <option {{ "selected" if measure|safe == "1month" }} value="1month">1 month</option>
+            <option {{ "selected" if measure|safe == "6months" }} value="6months">6 months</option>
+            <option {{ "selected" if measure|safe == "1year" }} value="1year">1 year</option>
+            <option {{ "selected" if measure|safe == "5years" }} value="5years">5 years</option>
+            <option {{ "selected" if measure|safe == "max" }} value="max">max</option>
         </select>
-
-        <!--
-        <div class="row" id="radios">
-            <div class="row" id="checkboxes">
-                <div class="col-xs-12">
-                    <div class="form-group">
-                    <label for="" class="col-md-6 control-label">Select any checkbox options:</label>
-                    <div class="col-md-6">
-                    <input name="checkbox1" type="hidden" value="0"/>
-                    <input name="checkbox2" type="hidden" value="0"/>
-                    <input name="checkbox3" type="hidden" value="0"/>
-                    <input name="checkbox4" type="hidden" value="0"/>
-                        <div class="btn-group-horizontal" data-toggle="buttons">
-                        <button type="button" class="btn btn-default" data-checkbox-name="checkbox1">Open</button>
-                        <button type="button" class="btn btn-default" data-checkbox-name="checkbox2">Close</button>
-                        <button type="button" class="btn btn-default" data-checkbox-name="checkbox3">Adjusted Open</button>
-                        <button type="button" class="btn btn-default" data-checkbox-name="checkbox3">Adjusted Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-
+        </fieldset>
 
         </form>
      </div>
@@ -140,25 +74,13 @@ $('.btn[data-checkbox-name]').click(function() {
 <div class="row" style="margin-top:3%;">
     <div class="input-group">
     {% if plot_div %}
-
-           <!-- <form name="measure_button" method='POST'>
-        Measure:
-        <select name="Measure">
-            <option {{ "selected" if measure|indent(4)|safe == "Value" }} value="Value">Value</option>
-            <option {{ "selected" if measure|indent(4)|safe == "Percent" }} value="Percent">Percent</option>
-        </select>
-        <br>
-        <button type="submit">Update</button>
-    </form>-->
-
-
-        {{ plot_div|indent(4)|safe }}
+        {{ plot_div|safe }}
     {% endif %}
     </div> 
 </div> 
 
 
-
+<div align="right"><a href="https://github.com/bastidas/flask-demo">ABF</a></div>
 </div>
 </body>
 </html>
